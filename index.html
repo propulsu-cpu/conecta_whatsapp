@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conector WhatsApp</title>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Lato&display=swap);
+@import url(https://fonts.googleapis.com/css2?family=Open+Sans&display=swap);
+    </style>
+  </head>
+  <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+    <div id="webcrumbs">
+      <!-- Tutorial Modal -->
+      <div id="tutorial-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl p-6 max-w-md mx-4 shadow-2xl">
+          <h2 class="text-xl font-semibold mb-4 flex items-center">
+            <svg class="w-6 h-6 text-[#9b3fbe] mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            Como Conectar seu WhatsApp
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
+            Siga os passos abaixo para conectar seu WhatsApp a este painel
+          </p>
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 bg-[#9b3fbe] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">1</div>
+              <p class="ml-3 text-sm">Clique no botão <span class="font-bold text-gray-900 dark:text-white">"Gerar QR Code"</span> para gerar o QR Code.</p>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 bg-[#9b3fbe] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">2</div>
+              <p class="ml-3 text-sm">Abra o WhatsApp no seu celular e vá em <span class="font-bold text-gray-900 dark:text-white">Configurações > Aparelhos conectados</span>.</p>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 bg-[#9b3fbe] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">3</div>
+              <p class="ml-3 text-sm">Toque em <span class="font-bold text-gray-900 dark:text-white">"Parear dispositivo"</span> e <span class="font-bold text-gray-900 dark:text-white">aponte a câmera</span> para o QR Code mostrado.</p>
+            </div>
+            <div class="flex items-start">
+              <div class="flex-shrink-0 bg-[#9b3fbe] text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">4</div>
+              <p class="ml-3 text-sm">Aguarde alguns segundos até o status mudar para "Conectado".</p>
+            </div>
+          </div>
+          <button id="close-tutorial" class="mt-6 w-full bg-[#9b3fbe] hover:bg-[#9b3fbe]/90 active:bg-[#9b3fbe]/80 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+            Fechar Tutorial
+          </button>
+        </div>
+      </div>
+      <div class="bg-gradient-to-br from-primary-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center font-sans p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-8 transition-all duration-300 transform hover:shadow-primary-200/50 hover:-translate-y-1">
+          <header class="text-center mb-8">
+            <div class="flex justify-between items-center mb-4">
+              <div class="flex-1 flex justify-center">
+                <img src="https://iyup.com.br/wp-content/uploads/2024/10/logo-iyup-chat-novo.svg" alt="iYupChat Logo" class="h-8 w-auto dark:hidden">
+                <img src="https://iyup.com.br/wp-content/uploads/2024/10/logo-iyup-chat-novo-dark.svg" alt="iYupChat Logo" class="h-8 w-auto hidden dark:block">
+              </div>
+              <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
+                <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+              </button>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 text-sm">Conecte seu WhatsApp aos nossos serviços</p>
+            <div class="mt-4 w-16 h-1 bg-primary-500 mx-auto rounded-full"></div>
+          </header>
+          
+          <div class="space-y-6" id="connection-form">
+            <div>
+              <label for="instance" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome da Instância</label>
+              <input type="text" id="instance" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="minha-instancia-whatsapp" required=""/>
+            </div>
+            <button class="w-full bg-[#9b3fbe] text-white font-medium py-3 px-4 rounded-lg hover:bg-[#9b3fbe]/90 active:bg-[#9b3fbe]/80 transition-all duration-200 transform hover:shadow-lg flex items-center justify-center gap-2" id="generate-qr">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1zM13 12a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1v-3a1 1 0 00-1-1h-3zm1 2v1h1v-1h-1z" clip-rule="evenodd"></path>
+              </svg>
+              Gerar QR Code
+            </button>
+          </div>
+
+          <div id="qr-display" class="hidden mt-8 text-center">
+            <div class="bg-white dark:bg-gray-700 rounded-2xl shadow-lg overflow-hidden">
+              <div class="p-6 space-y-4">
+                <div id="qrcode" class="bg-white dark:bg-gray-800 w-48 h-48 mx-auto flex items-center justify-center rounded-xl shadow-inner">
+                  <div id="loading-spinner" class="hidden">
+                    <svg class="animate-spin h-12 w-12 text-[#9b3fbe]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  </div>
+                  <canvas id="qrcodeCanvas" style="display: none;"></canvas>
+                </div>
+                <div id="countdown" class="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  Atualizando em: <span class="font-medium">30s</span>
+                </div>
+                <div class="flex items-center justify-center gap-2 text-gray-600 dark:text-gray-300">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                  </svg>
+                  <p class="text-sm font-medium">Escaneie com seu WhatsApp</p>
+                </div>
+              </div>
+              <div id="connection-status" class="px-6 py-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-600">
+                <div class="flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
+                  <svg class="w-4 h-4 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5.05 3.636a1 1 0 010 1.414 7 7 0 000 9.9 1 1 0 11-1.414 1.414 9 9 0 010-12.728 1 1 0 011.414 0zm9.9 0a1 1 0 011.414 0 9 9 0 010 12.728 1 1 0 11-1.414-1.414 7 7 0 000-9.9 1 1 0 010-1.414zM7.879 6.464a1 1 0 010 1.414 3 3 0 000 4.243 1 1 0 11-1.415 1.414 5 5 0 010-7.07 1 1 0 011.415 0zm4.242 0a1 1 0 011.415 0 5 5 0 010 7.072 1 1 0 01-1.415-1.415 3 3 0 000-4.242 1 1 0 010-1.415z" clip-rule="evenodd"></path>
+                  </svg>
+                  Aguardando conexão...
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="status-display" class="hidden mt-6">
+            <div class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800 rounded-lg p-4">
+              <div class="flex items-center justify-center">
+                <svg class="h-5 w-5 text-green-500 dark:text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p class="text-green-700 dark:text-green-300 text-sm font-medium">QR Code gerado com sucesso!</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="error-display" class="hidden mt-6">
+            <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg p-6">
+              <div class="flex flex-col items-center text-center space-y-3">
+                <div class="flex-shrink-0">
+                  <svg class="h-8 w-8 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="text-center">
+                  <h3 class="text-lg font-medium text-red-800 dark:text-red-200 mb-2">
+                    Instância não encontrada
+                  </h3>
+                  <p class="text-sm text-red-700 dark:text-red-300">
+                    Verifique o nome da instância<br>e tente novamente.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="profile-actions" class="hidden mt-6">
+            <div class="flex justify-center gap-2">
+              <button onclick="restartInstance()" class="flex items-center px-2 py-1 text-xs font-medium text-yellow-700 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300 focus:outline-none transition-colors duration-200">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Reiniciar
+              </button>
+              <button onclick="logoutInstance()" class="flex items-center px-2 py-1 text-xs font-medium text-red-700 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 focus:outline-none transition-colors duration-200">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                Desconectar
+              </button>
+              <button onclick="updateProfileInfo()" class="flex items-center px-2 py-1 text-xs font-medium text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none transition-colors duration-200">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16a2 2 0 002 2h12a2 2 0 002-2V8.342a2 2 0 00-.602-1.43l-4.44-4.342A2 2 0 0014.341 2H6a2 2 0 00-2 2z"></path>
+                </svg>
+                Atualizar
+              </button>
+              <button onclick="showEditProfileModal()" class="flex items-center px-2 py-1 text-xs font-medium text-purple-700 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 focus:outline-none transition-colors duration-200">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                </svg>
+                Editar
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button id="toggle-logs" class="w-full flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200">
+              <svg id="logs-icon-closed" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+              <svg id="logs-icon-open" class="w-4 h-4 transform rotate-180 transition-transform duration-200 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+              <span>Logs do sistema</span>
+              <span id="logs-count" class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full ml-2">0</span>
+            </button>
+            <div id="logs" class="hidden mt-2 bg-gray-50 dark:bg-gray-700 rounded-lg p-4 max-h-40 overflow-y-auto transition-all duration-200">
+              <div class="text-xs font-mono space-y-1">
+                <div class="text-blue-600 dark:text-blue-400">[Sistema iniciado] Aguardando conexão...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal de Edição do Perfil -->
+          <div id="edit-profile-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-xl p-6 max-w-md mx-4 shadow-2xl w-full">
+              <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <svg class="w-6 h-6 text-[#9b3fbe] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                </svg>
+                Editar Perfil
+              </h2>
+              
+              <form id="edit-profile-form" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome do Perfil</label>
+                  <input type="text" id="profile-name" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#9b3fbe] focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Seu nome">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                  <input type="text" id="profile-status" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#9b3fbe] focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Seu status">
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Foto do Perfil</label>
+                  <input type="file" id="profile-picture" accept="image/*" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-[#9b3fbe] focus:border-transparent transition-all duration-200 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                </div>
+
+                <div class="flex justify-end gap-2 mt-6">
+                  <button type="button" onclick="closeEditProfileModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 focus:outline-none transition-colors duration-200">
+                    Cancelar
+                  </button>
+                  <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-[#9b3fbe] hover:bg-[#9b3fbe]/90 rounded-lg focus:outline-none transition-colors duration-200">
+                    Salvar Alterações
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <footer class="mt-8 pt-4 border-t border-gray-100 dark:border-gray-700 text-center">
+            <p class="text-xs text-gray-500 dark:text-gray-400">Integração Segura com API WhatsApp</p>
+            <div class="mt-2 flex justify-center space-x-2">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300">
+                <span class="h-1.5 w-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                Status: Pronto
+              </span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script>
+      tailwind.config = {
+        content: ["./src/**/*.{html,js}"],
+        darkMode: 'class',
+        theme: {
+          "name": "Bluewave",
+          "fontFamily": {
+            "sans": ["Open Sans", "ui-sans-serif", "system-ui", "sans-serif", "\"Apple Color Emoji\"", "\"Segoe UI Emoji\"", "\"Segoe UI Symbol\"", "\"Noto Color Emoji\""]
+          },
+          "extend": {
+            "fontFamily": {
+              "title": ["Lato", "ui-sans-serif", "system-ui", "sans-serif", "\"Apple Color Emoji\"", "\"Segoe UI Emoji\"", "\"Segoe UI Symbol\"", "\"Noto Color Emoji\""],
+              "body": ["Open Sans", "ui-sans-serif", "system-ui", "sans-serif", "\"Apple Color Emoji\"", "\"Segoe UI Emoji\"", "\"Segoe UI Symbol\"", "\"Noto Color Emoji\""]
+            },
+            "colors": {
+              "neutral": {
+                "50": "#f7f7f7",
+                "100": "#eeeeee",
+                "200": "#e0e0e0",
+                "300": "#cacaca",
+                "400": "#b1b1b1",
+                "500": "#999999",
+                "600": "#7f7f7f",
+                "700": "#676767",
+                "800": "#545454",
+                "900": "#464646",
+                "950": "#282828"
+              },
+              "primary": {
+                "50": "#f3f1ff",
+                "100": "#e9e5ff",
+                "200": "#d5cfff",
+                "300": "#b7a9ff",
+                "400": "#9478ff",
+                "500": "#7341ff",
+                "600": "#631bff",
+                "700": "#611bf8",
+                "800": "#4607d0",
+                "900": "#3c08aa",
+                "950": "#220174",
+                "DEFAULT": "#611bf8"
+              }
+            }
+          }
+        },
+        plugins: [],
+        important: '#webcrumbs'
+    };
+
+      function addLog(message, type = 'info') {
+        const logsDiv = document.getElementById('logs');
+        const logEntry = document.createElement('div');
+        const color = type === 'info' ? 'text-blue-600 dark:text-blue-400' : 
+                     type === 'success' ? 'text-green-600 dark:text-green-400' : 
+                     'text-red-600 dark:text-red-400';
+        logEntry.className = `${color} text-xs font-mono`;
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logsDiv.querySelector('.space-y-1').appendChild(logEntry);
+        logsDiv.scrollTop = logsDiv.scrollHeight;
+
+        // Atualiza o contador de logs
+        const logsCount = document.getElementById('logs-count');
+        const currentCount = parseInt(logsCount.textContent);
+        logsCount.textContent = currentCount + 1;
+      }
+
+      // Função para gerar QR code
+      async function generateQRCode(baseUrl, instance, apiKey) {
+        try {
+          // Para o contador atual
+          stopCountdown();
+          
+          // Mostra o spinner de carregamento
+          document.getElementById('loading-spinner').classList.remove('hidden');
+          document.getElementById('qrcodeCanvas').style.display = 'none';
+
+          // Primeiro verifica se já está conectado
+          const statusResponse = await fetch(`${baseUrl}/instance/connectionState/${instance}`, {
+            method: 'GET',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (statusResponse.ok) {
+            const statusData = await statusResponse.json();
+            if (statusData.instance.state === 'open') {
+              addLog('WhatsApp já está conectado, não é necessário gerar QR code', 'info');
+              document.getElementById('loading-spinner').classList.add('hidden');
+              document.getElementById('qrcodeCanvas').style.display = 'block';
+              return true;
+            }
+          }
+
+          const response = await fetch(`${baseUrl}/instance/connect/${instance}`, {
+            method: 'GET',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          addLog(`Status da resposta: ${response.status}`, 'info');
+
+          if (!response.ok) {
+            if (response.status === 404) {
+              // Esconde o container do QR code
+              document.getElementById('qr-display').classList.add('hidden');
+              document.getElementById('loading-spinner').classList.add('hidden');
+              
+              // Esconde a mensagem de sucesso
+              document.getElementById('status-display').classList.add('hidden');
+              
+              // Mostra mensagem de erro específica para instância não encontrada
+              const errorDisplay = document.getElementById('error-display');
+              errorDisplay.classList.remove('hidden');
+              errorDisplay.innerHTML = `
+                <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg p-6">
+                  <div class="flex flex-col items-center text-center space-y-3">
+                    <div class="flex-shrink-0">
+                      <svg class="h-8 w-8 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                    </div>
+                    <div class="text-center">
+                      <h3 class="text-lg font-medium text-red-800 dark:text-red-200 mb-2">
+                        Instância não encontrada
+                      </h3>
+                      <p class="text-sm text-red-700 dark:text-red-300">
+                        Verifique o nome da instância<br>e tente novamente.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              `;
+              
+              // Mostra o formulário novamente
+              document.getElementById('connection-form').classList.remove('hidden');
+              
+              addLog('Instância não encontrada', 'error');
+              return false;
+            }
+            throw new Error(`Erro na conexão: ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (!data.code) {
+            addLog('QR Code não disponível no momento', 'info');
+            document.getElementById('loading-spinner').classList.add('hidden');
+            document.getElementById('qrcodeCanvas').style.display = 'block';
+            return false;
+          }
+
+          addLog('Resposta recebida com sucesso', 'success');
+          
+          // Limpa o QR code anterior
+          document.getElementById('qrcode').innerHTML = `
+            <div id="loading-spinner">
+              <svg class="animate-spin h-12 w-12 text-[#9b3fbe]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            </div>
+            <canvas id="qrcodeCanvas" style="display: none;"></canvas>
+          `;
+          
+          // Gera o novo QR code
+          const canvas = document.getElementById('qrcodeCanvas');
+          QRCode.toCanvas(canvas, data.code, {
+            width: 180,
+            height: 180,
+            margin: 0
+          }, function (error) {
+            if (error) {
+              addLog(`Erro ao gerar QR Code: ${error.message}`, 'error');
+              console.error(error);
+              document.getElementById('error-display').classList.remove('hidden');
+              document.getElementById('status-display').classList.add('hidden');
+              document.getElementById('loading-spinner').classList.add('hidden');
+              document.getElementById('qrcodeCanvas').style.display = 'block';
+            } else {
+              addLog('QR Code gerado com sucesso', 'success');
+              // Esconde o spinner e mostra o QR code
+              document.getElementById('loading-spinner').classList.add('hidden');
+              document.getElementById('qrcodeCanvas').style.display = 'block';
+              
+              // Garante que o container do QR code está visível
+              document.getElementById('qr-display').classList.remove('hidden');
+              document.getElementById('status-display').classList.remove('hidden');
+            }
+          });
+
+          return true;
+        } catch (error) {
+          addLog(`Erro ao gerar QR Code: ${error.message}`, 'error');
+          document.getElementById('loading-spinner').classList.add('hidden');
+          document.getElementById('qrcodeCanvas').style.display = 'block';
+          return false;
+        }
+      }
+
+      // Função para iniciar o contador regressivo
+      function startCountdown(baseUrl, instance, apiKey) {
+        // Limpa qualquer intervalo existente
+        if (window.countdownInterval) {
+          clearInterval(window.countdownInterval);
+        }
+
+        let timeLeft = 30;
+        const countdownElement = document.getElementById('countdown').querySelector('span');
+        
+        // Atualiza o contador imediatamente
+        countdownElement.textContent = `${timeLeft}s`;
+        
+        // Cria um novo intervalo
+        window.countdownInterval = setInterval(() => {
+          timeLeft--;
+          countdownElement.textContent = `${timeLeft}s`;
+          
+          if (timeLeft <= 0) {
+            clearInterval(window.countdownInterval);
+            generateQRCode(baseUrl, instance, apiKey).then(() => {
+              // Reinicia o contador após gerar o novo QR code
+              startCountdown(baseUrl, instance, apiKey);
+            });
+          }
+        }, 1000);
+      }
+
+      // Função para parar o contador
+      function stopCountdown() {
+        if (window.countdownInterval) {
+          clearInterval(window.countdownInterval);
+          window.countdownInterval = null;
+        }
+      }
+
+      document.getElementById('generate-qr').addEventListener('click', async (e) => {
+        e.preventDefault();
+        
+        const baseUrl = 'https://evolution.propulsu.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'KaiQnweg73kSvnhWwPkoN2ltUxddMv7c';
+        
+        addLog(`Iniciando conexão com: ${baseUrl}`, 'info');
+        addLog(`Instância: ${instance}`, 'info');
+        addLog('Verificando status da conexão...', 'info');
+
+        try {
+          // Primeiro verifica se já está conectado
+          const statusResponse = await fetch(`${baseUrl}/instance/connectionState/${instance}`, {
+            method: 'GET',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (statusResponse.ok) {
+            const statusData = await statusResponse.json();
+            
+            if (statusData.instance.state === 'open') {
+              addLog('WhatsApp já está conectado!', 'success');
+              
+              // Oculta o formulário
+              document.getElementById('connection-form').classList.add('hidden');
+              
+              // Atualiza o status de conexão
+              document.getElementById('qr-display').classList.add('hidden');
+              document.getElementById('error-display').classList.add('hidden');
+              
+              // Atualiza a mensagem de sucesso
+              const statusDisplay = document.getElementById('status-display');
+              statusDisplay.classList.remove('hidden');
+              statusDisplay.querySelector('p').textContent = 'WhatsApp conectado';
+              
+              // Busca e exibe as informações da instância
+              await fetchInstanceInfo(baseUrl, instance, apiKey);
+              
+              // Inicia a verificação contínua do status
+              checkConnectionStatus(baseUrl, instance, apiKey);
+              return;
+            }
+          }
+          
+          // Se não estiver conectado, procede com a geração do QR code
+          addLog('Gerando novo QR Code...', 'info');
+          
+          // Oculta o formulário
+          document.getElementById('connection-form').classList.add('hidden');
+          
+          // Mostra o container do QR code
+          document.getElementById('qr-display').classList.remove('hidden');
+          document.getElementById('status-display').classList.remove('hidden');
+          document.getElementById('error-display').classList.add('hidden');
+          
+          // Gera o QR code inicial
+          const success = await generateQRCode(baseUrl, instance, apiKey);
+          
+          if (success) {
+            // Inicia o contador e a atualização automática
+            startCountdown(baseUrl, instance, apiKey);
+            
+            // Inicia a verificação do status
+            checkConnectionStatus(baseUrl, instance, apiKey);
+          }
+
+        } catch (error) {
+          addLog(`Erro: ${error.message}`, 'error');
+          document.getElementById('error-display').classList.remove('hidden');
+          document.getElementById('status-display').classList.add('hidden');
+        }
+      });
+
+      // Função para verificar o status da conexão
+      async function checkConnectionStatus(baseUrl, instance, apiKey) {
+        let statusInterval;
+        let lastQRGeneration = 0;
+        let lastConnectionState = null;
+        let lastInfoUpdate = 0;
+        const INFO_UPDATE_INTERVAL = 30000; // Atualiza informações a cada 30 segundos
+        
+        const checkStatus = async () => {
+          try {
+            const response = await fetch(`${baseUrl}/instance/connectionState/${instance}`, {
+              method: 'GET',
+              headers: {
+                'apikey': apiKey
+              }
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              const currentState = data.instance.state;
+              const now = Date.now();
+
+              // Se o estado mudou ou se passou tempo suficiente desde a última atualização
+              if (currentState !== lastConnectionState || (now - lastInfoUpdate >= INFO_UPDATE_INTERVAL)) {
+                // Se mudou de conectado para desconectado, força geração de novo QR code
+                if (lastConnectionState === 'open' && currentState !== 'open') {
+                  lastQRGeneration = 0; // Reseta o timer do QR code
+                  addLog('Dispositivo desconectado, gerando novo QR code...', 'info');
+                  
+                  // Mostra o container do QR code
+                  document.getElementById('qr-display').classList.remove('hidden');
+                  document.getElementById('status-display').classList.remove('hidden');
+                  
+                  // Gera um novo QR code imediatamente após detectar a desconexão
+                  await generateQRCode(baseUrl, instance, apiKey);
+                  startCountdown(baseUrl, instance, apiKey);
+                }
+
+                lastConnectionState = currentState;
+                lastInfoUpdate = now;
+
+                // Atualiza a interface com base no estado atual
+                if (currentState !== 'open') {
+                  // Mostra o container do QR code
+                  document.getElementById('qr-display').classList.remove('hidden');
+                  document.getElementById('status-display').classList.remove('hidden');
+                  
+                  // Esconde o profile-info
+                  const profileInfo = document.getElementById('profile-info');
+                  if (profileInfo) {
+                    profileInfo.classList.add('hidden');
+                  }
+
+                  // Esconde as ações do perfil
+                  document.getElementById('profile-actions').classList.add('hidden');
+
+                  // Se passou tempo suficiente, gera novo QR code
+                  if (now - lastQRGeneration >= 30000) {
+                    lastQRGeneration = now;
+                    await generateQRCode(baseUrl, instance, apiKey);
+                    startCountdown(baseUrl, instance, apiKey);
+                  }
+                } else {
+                  // Se estiver conectado
+                  document.getElementById('qr-display').classList.add('hidden');
+
+                  // Mostra o profile-info se existir
+                  const profileInfo = document.getElementById('profile-info');
+                  if (profileInfo) {
+                    profileInfo.classList.remove('hidden');
+                  }
+
+                  // Mostra as ações do perfil
+                  document.getElementById('profile-actions').classList.remove('hidden');
+
+                  // Atualiza as informações do perfil
+                  await fetchInstanceInfo(baseUrl, instance, apiKey);
+                }
+
+                // Atualiza o status de conexão
+                updateConnectionStatus(currentState);
+              }
+            }
+          } catch (error) {
+            console.error('Erro ao verificar status:', error);
+          }
+        };
+
+        // Função auxiliar para atualizar o status de conexão na interface
+        function updateConnectionStatus(state) {
+          const connectionStatus = document.getElementById('connection-status');
+          const statusDisplay = document.getElementById('status-display');
+
+          if (state === 'open') {
+            connectionStatus.innerHTML = `
+              <div class="flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
+                <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                Conectado
+              </div>
+            `;
+
+            statusDisplay.innerHTML = `
+              <div class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                <div class="flex items-center justify-center">
+                  <svg class="h-5 w-5 text-green-500 dark:text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p class="text-green-700 dark:text-green-300 text-sm font-medium">WhatsApp conectado</p>
+                </div>
+              </div>
+            `;
+          } else {
+            connectionStatus.innerHTML = `
+              <div class="flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
+                <svg class="w-4 h-4 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M5.05 3.636a1 1 0 010 1.414 7 7 0 000 9.9 1 1 0 11-1.414 1.414 9 9 0 010-12.728 1 1 0 011.414 0zm9.9 0a1 1 0 011.414 0 9 9 0 010 12.728 1 1 0 11-1.414-1.414 7 7 0 000-9.9 1 1 0 010-1.414zM7.879 6.464a1 1 0 010 1.414 3 3 0 000 4.243 1 1 0 11-1.415 1.414 5 5 0 010-7.07 1 1 0 011.415 0zm4.242 0a1 1 0 011.415 0 5 5 0 010 7.072 1 1 0 01-1.415-1.415 3 3 0 000-4.242 1 1 0 010-1.415z" clip-rule="evenodd"></path>
+                </svg>
+                Aguardando conexão...
+              </div>
+            `;
+
+            statusDisplay.innerHTML = `
+              <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <div class="flex items-center justify-center">
+                  <svg class="h-5 w-5 text-red-500 dark:text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <p class="text-red-700 dark:text-red-300 text-sm font-medium">WhatsApp desconectado</p>
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        // Verifica o status a cada 3 segundos
+        statusInterval = setInterval(async () => {
+          await checkStatus();
+        }, 3000);
+
+        // Executa uma verificação imediata
+        await checkStatus();
+
+        // Retorna uma função para limpar o intervalo quando necessário
+        return () => {
+          clearInterval(statusInterval);
+        };
+      }
+
+      // Função para buscar informações da instância
+      async function fetchInstanceInfo(baseUrl, instance, apiKey) {
+        try {
+          const response = await fetch(`${baseUrl}/instance/fetchInstances?instanceName=${instance}`, {
+            method: 'GET',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            
+            // Verifica se há dados e pega a primeira instância
+            const instanceInfo = Array.isArray(data) && data.length > 0 ? data[0] : null;
+            
+            if (instanceInfo) {
+              // Remove o container anterior se existir
+              const existingProfile = document.getElementById('profile-info');
+              if (existingProfile) {
+                existingProfile.remove();
+              }
+
+              // Se estiver desconectado, não exibe o perfil
+              if (instanceInfo.connectionStatus !== 'open') {
+                addLog('Instância desconectada', 'error');
+                document.getElementById('profile-actions').classList.add('hidden');
+                return;
+              }
+              
+              // Mostra as ações do perfil
+              document.getElementById('profile-actions').classList.remove('hidden');
+              
+              // Cria o container para as informações do perfil
+              const profileInfo = document.createElement('div');
+              profileInfo.id = 'profile-info';
+              profileInfo.className = 'mt-6 bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg';
+              profileInfo.innerHTML = `
+                <div class="flex flex-col space-y-4">
+                  <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                      <img src="${instanceInfo.profilePicUrl || 'https://via.placeholder.com/50'}" 
+                           alt="Foto do perfil" 
+                           class="h-12 w-12 rounded-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        ${instanceInfo.profileName || 'Nome não disponível'}
+                      </p>
+                      <p class="text-sm text-gray-500 dark:text-gray-400 truncate">
+                        ${instanceInfo.number || instanceInfo.ownerJid || 'Número não disponível'}
+                      </p>
+                    </div>
+                    <div class="flex-shrink-0">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                        instanceInfo.connectionStatus === 'open' 
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                          : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                      }">
+                        ${instanceInfo.connectionStatus === 'open' ? 'Conectado' : 'Desconectado'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div class="grid grid-cols-3 gap-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                    <div class="text-center">
+                      <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                        ${instanceInfo._count.Chat.toLocaleString()}
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Conversas</p>
+                    </div>
+                    <div class="text-center">
+                      <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                        ${instanceInfo._count.Contact.toLocaleString()}
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Contatos</p>
+                    </div>
+                    <div class="text-center">
+                      <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                        ${instanceInfo._count.Message.toLocaleString()}
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Mensagens</p>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              // Insere o profile-info após o status display
+              const statusDisplay = document.getElementById('status-display');
+              statusDisplay.parentNode.insertBefore(profileInfo, statusDisplay.nextSibling);
+            }
+          }
+        } catch (error) {
+          console.error('Erro ao buscar informações da instância:', error);
+        }
+      }
+
+      // Função para reiniciar a instância
+      async function restartInstance() {
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        try {
+          addLog('Reiniciando instância...', 'info');
+          
+          // Primeiro desconecta a instância
+          const logoutResponse = await fetch(`${baseUrl}/instance/logout/${instance}`, {
+            method: 'DELETE',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (!logoutResponse.ok) {
+            throw new Error(`Erro ao desconectar: ${logoutResponse.status}`);
+          }
+
+          addLog('Instância desconectada, reconectando...', 'info');
+
+          // Aguarda um momento antes de reconectar
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Reconecta a instância
+          const connectResponse = await fetch(`${baseUrl}/instance/connect/${instance}`, {
+            method: 'GET',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (!connectResponse.ok) {
+            throw new Error(`Erro ao reconectar: ${connectResponse.status}`);
+          }
+
+          addLog('Instância reiniciada com sucesso!', 'success');
+          
+          // Esconde o profile-info temporariamente
+          const profileInfo = document.getElementById('profile-info');
+          if (profileInfo) {
+            profileInfo.classList.add('hidden');
+          }
+          
+          // Mostra o QR code
+          document.getElementById('qr-display').classList.remove('hidden');
+          
+          // Atualiza o status após reiniciar
+          setTimeout(() => checkConnectionStatus(baseUrl, instance, apiKey), 2000);
+        } catch (error) {
+          addLog(`Erro ao reiniciar instância: ${error.message}`, 'error');
+        }
+      }
+
+      // Função para fazer logout da instância
+      async function logoutInstance() {
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        try {
+          addLog('Desconectando instância...', 'info');
+          
+          const response = await fetch(`${baseUrl}/instance/logout/${instance}`, {
+            method: 'DELETE',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (response.ok) {
+            addLog('Instância desconectada com sucesso!', 'success');
+            
+            // Esconde o profile-info
+            const profileInfo = document.getElementById('profile-info');
+            if (profileInfo) {
+              profileInfo.classList.add('hidden');
+            }
+            
+            // Esconde as ações do perfil
+            document.getElementById('profile-actions').classList.add('hidden');
+            
+            // Mostra o QR code container
+            document.getElementById('qr-display').classList.remove('hidden');
+            
+            // Atualiza o status de conexão
+            document.getElementById('connection-status').innerHTML = `
+              <div class="flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
+                <svg class="w-4 h-4 mr-1 animate-pulse" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M5.05 3.636a1 1 0 010 1.414 7 7 0 000 9.9 1 1 0 11-1.414 1.414 9 9 0 010-12.728 1 1 0 011.414 0zm9.9 0a1 1 0 011.414 0 9 9 0 010 12.728 1 1 0 11-1.414-1.414 7 7 0 000-9.9 1 1 0 010-1.414zM7.879 6.464a1 1 0 010 1.414 3 3 0 000 4.243 1 1 0 11-1.415 1.414 5 5 0 010-7.07 1 1 0 011.415 0zm4.242 0a1 1 0 011.415 0 5 5 0 010 7.072 1 1 0 01-1.415-1.415 3 3 0 000-4.242 1 1 0 010-1.415z" clip-rule="evenodd"></path>
+                </svg>
+                Aguardando conexão...
+              </div>
+            `;
+
+            // Atualiza o status display
+            const statusDisplay = document.getElementById('status-display');
+            statusDisplay.classList.remove('hidden');
+            statusDisplay.innerHTML = `
+              <div class="bg-yellow-50 dark:bg-yellow-900 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                <div class="flex items-center justify-center">
+                  <svg class="h-5 w-5 text-yellow-500 dark:text-yellow-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                  </svg>
+                  <p class="text-yellow-700 dark:text-yellow-300 text-sm font-medium">Dispositivo desconectado</p>
+                </div>
+              </div>
+            `;
+
+            // Aguarda um momento antes de tentar gerar o novo QR code
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // Gera um novo QR code após desconectar
+            const success = await generateQRCode(baseUrl, instance, apiKey);
+            
+            if (success) {
+              // Inicia o contador e a atualização automática
+              startCountdown(baseUrl, instance, apiKey);
+            }
+
+            // Força uma verificação imediata do status
+            await checkConnectionStatus(baseUrl, instance, apiKey);
+          } else {
+            throw new Error(`Erro ao desconectar instância: ${response.status}`);
+          }
+        } catch (error) {
+          addLog(`Erro ao desconectar instância: ${error.message}`, 'error');
+        }
+      }
+
+      // Função para atualizar informações do perfil
+      async function updateProfileInfo() {
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        try {
+          addLog('Atualizando informações do perfil...', 'info');
+          
+          const response = await fetch(`${baseUrl}/instance/fetchProfile?instanceName=${instance}`, {
+            method: 'GET',
+            headers: {
+              'apikey': apiKey
+            }
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            addLog('Informações do perfil atualizadas!', 'success');
+            // Atualiza as informações na interface
+            await fetchInstanceInfo(baseUrl, instance, apiKey);
+          } else {
+            throw new Error(`Erro ao atualizar perfil: ${response.status}`);
+          }
+        } catch (error) {
+          addLog(`Erro ao atualizar perfil: ${error.message}`, 'error');
+        }
+      }
+
+      // Função para gerenciar o tema
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
+          document.getElementById('theme-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+        } else {
+          document.documentElement.classList.remove('dark');
+          localStorage.setItem('theme', 'light');
+          document.getElementById('theme-icon').innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+        }
+      }
+
+      // Verifica o tema do sistema e do localStorage
+      function initTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme) {
+          setTheme(savedTheme);
+        } else if (systemPrefersDark) {
+          setTheme('dark');
+        } else {
+          setTheme('light');
+        }
+      }
+
+      // Inicializa o tema
+      initTheme();
+
+      // Adiciona listener para mudança de preferência do sistema
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem('theme')) {
+          setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+
+      // Adiciona listener para o botão de tema
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        setTheme(isDark ? 'light' : 'dark');
+      });
+
+      // Função para controlar a visibilidade dos logs
+      document.getElementById('toggle-logs').addEventListener('click', () => {
+        const logsDiv = document.getElementById('logs');
+        const logsIconClosed = document.getElementById('logs-icon-closed');
+        const logsIconOpen = document.getElementById('logs-icon-open');
+        
+        if (logsDiv.classList.contains('hidden')) {
+          logsDiv.classList.remove('hidden');
+          logsIconClosed.classList.add('hidden');
+          logsIconOpen.classList.remove('hidden');
+        } else {
+          logsDiv.classList.add('hidden');
+          logsIconClosed.classList.remove('hidden');
+          logsIconOpen.classList.add('hidden');
+        }
+      });
+
+      // Função para mostrar o tutorial
+      function showTutorial() {
+        const tutorialModal = document.getElementById('tutorial-modal');
+        tutorialModal.classList.remove('hidden');
+      }
+
+      // Função para fechar o tutorial
+      function closeTutorial() {
+        const tutorialModal = document.getElementById('tutorial-modal');
+        tutorialModal.classList.add('hidden');
+        // Salva no localStorage que o tutorial já foi visto
+        localStorage.setItem('tutorialSeen', 'true');
+      }
+
+      // Quando a página carregar, verifica se o tutorial já foi visto
+      document.addEventListener('DOMContentLoaded', () => {
+        const tutorialSeen = localStorage.getItem('tutorialSeen');
+        if (!tutorialSeen) {
+          showTutorial();
+        }
+      });
+
+      // Adiciona o evento de clique no botão de fechar
+      document.getElementById('close-tutorial').addEventListener('click', closeTutorial);
+
+      // Funções para o modal de edição do perfil
+      function showEditProfileModal() {
+        const modal = document.getElementById('edit-profile-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+
+      function closeEditProfileModal() {
+        const modal = document.getElementById('edit-profile-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+
+      // Função para atualizar o nome do perfil
+      async function updateProfileName(name) {
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        try {
+          const response = await fetch(`${baseUrl}/instance/updateProfileName`, {
+            method: 'POST',
+            headers: {
+              'apikey': apiKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              instanceName: instance,
+              name: name
+            })
+          });
+
+          if (response.ok) {
+            addLog('Nome do perfil atualizado com sucesso!', 'success');
+          } else {
+            throw new Error(`Erro ao atualizar nome: ${response.status}`);
+          }
+        } catch (error) {
+          addLog(`Erro ao atualizar nome: ${error.message}`, 'error');
+        }
+      }
+
+      // Função para atualizar o status
+      async function updateProfileStatus(status) {
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        try {
+          const response = await fetch(`${baseUrl}/instance/updateProfileStatus`, {
+            method: 'POST',
+            headers: {
+              'apikey': apiKey,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              instanceName: instance,
+              status: status
+            })
+          });
+
+          if (response.ok) {
+            addLog('Status atualizado com sucesso!', 'success');
+          } else {
+            throw new Error(`Erro ao atualizar status: ${response.status}`);
+          }
+        } catch (error) {
+          addLog(`Erro ao atualizar status: ${error.message}`, 'error');
+        }
+      }
+
+      // Função para atualizar a foto do perfil
+      async function updateProfilePicture(file) {
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        try {
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            const base64Image = e.target.result.split(',')[1];
+
+            const response = await fetch(`${baseUrl}/instance/updateProfilePicture`, {
+              method: 'POST',
+              headers: {
+                'apikey': apiKey,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                instanceName: instance,
+                image: base64Image
+              })
+            });
+
+            if (response.ok) {
+              addLog('Foto do perfil atualizada com sucesso!', 'success');
+            } else {
+              throw new Error(`Erro ao atualizar foto: ${response.status}`);
+            }
+          };
+          reader.readAsDataURL(file);
+        } catch (error) {
+          addLog(`Erro ao atualizar foto: ${error.message}`, 'error');
+        }
+      }
+
+      // Manipulador do formulário de edição
+      document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('profile-name').value;
+        const status = document.getElementById('profile-status').value;
+        const pictureFile = document.getElementById('profile-picture').files[0];
+        const baseUrl = 'https://link-da-sua-api.com.br';
+        const instance = document.getElementById('instance').value;
+        const apiKey = 'suaApiKey';
+
+        if (name) {
+          await updateProfileName(name);
+        }
+        
+        if (status) {
+          await updateProfileStatus(status);
+        }
+        
+        if (pictureFile) {
+          await updateProfilePicture(pictureFile);
+        }
+
+        // Atualiza as informações do perfil na interface
+        await fetchInstanceInfo(baseUrl, instance, apiKey);
+
+        closeEditProfileModal();
+      });
+    </script>
+  </body>
+</html>
